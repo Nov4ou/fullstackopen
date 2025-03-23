@@ -17,6 +17,15 @@ const Button = ({ onClick, text }) => (
 )
 
 const Statistics = (props) => {
+  if (props.feedback[3].value == 0) {
+    return (
+      <div>
+        <h1>statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>statistics</h1>
