@@ -16,6 +16,16 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
+const StatisticLine = (props) => {
+
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.text === "positive" ? props.value * 100 + "%" : props.value}</td>
+    </tr>
+  )
+}
+
 const Statistics = (props) => {
   if (props.feedback[3].value == 0) {
     return (
@@ -29,17 +39,19 @@ const Statistics = (props) => {
   return (
     <div>
       <h1>statistics</h1>
-      <p>good {props.feedback[0].value}</p>
-      <p>neutral {props.feedback[1].value}</p>
-      <p>bad {props.feedback[2].value}</p>
-      <p>all {props.feedback[3].value}</p>
-      <p>average {props.feedback[4].value}</p>
-      <p>positive {(props.feedback[5].value * 100)} %</p>
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={props.feedback[0].value} />
+          <StatisticLine text="netural" value={props.feedback[1].value} />
+          <StatisticLine text="bad" value={props.feedback[2].value} />
+          <StatisticLine text="all" value={props.feedback[3].value} />
+          <StatisticLine text="average" value={props.feedback[4].value} />
+          <StatisticLine text="positive" value={(props.feedback[5].value)} />
+        </tbody>
+      </table>
     </div>
   )
 }
-
-
 
 const App = () => {
   // save clicks of each button to its own state
