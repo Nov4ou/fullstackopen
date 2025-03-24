@@ -139,7 +139,6 @@ const App = () => {
       <Button onClick={handleNeutralClick} text='neutral' />
       <Button onClick={handleBadClick} text='bad' />
       <Statistics feedback={feedback} />
-
     </div>
   )
 }
