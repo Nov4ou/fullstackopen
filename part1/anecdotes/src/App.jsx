@@ -18,6 +18,26 @@ const DisplayVotes = (props) => {
   )
 }
 
+const DisplayRandomAnecdote = ({ text, anecdote }) => (
+  <div>
+    <h1>{text}</h1>
+    <p>{anecdote}</p>
+  </div>
+)
+
+const DisplayMostvotedAnecdote = ({ text, anecdotes, votes }) => {
+  const maxVal = Math.max(...votes)
+  const index = votes.indexOf(maxVal)
+
+  return (
+    <div>
+      <h1>{text}</h1>
+      <p>{anecdotes[index]}</p>
+      <p>has {votes[index]} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -27,7 +47,7 @@ const App = () => {
     'Premature optimization is the root of all evil.',
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
-    'The only way to go fast, is to go well.',
+    'The only way to go fast, is to go well.'
   ]
 
   const initialVotes = new Array(anecdotes.length).fill(0)
@@ -40,7 +60,7 @@ const App = () => {
   }
 
   const handleVote = () => {
-    const copy = { ...votes }
+    const copy = [...votes]
     copy[selected] += 1
     console.log(copy)
     setVotes(copy)
@@ -48,10 +68,12 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
+      {/* <p>{anecdotes[selected]}</p> */}
+      <DisplayRandomAnecdote text="Anecdote of the day" anecdote={anecdotes[selected]} />
       <DisplayVotes value={votes[selected]} />
       <Button onClick={handleVote} text="vote" />
       <Button onClick={handleNextClick} text="next anecdote" />
+      <DisplayMostvotedAnecdote text="Anecdote with most votes" anecdotes={anecdotes} votes={votes} />
     </div>
   )
 }
