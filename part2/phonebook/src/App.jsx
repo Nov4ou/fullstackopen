@@ -10,15 +10,24 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
 
+  const isNameExists = (name) => {
+    return persons.some((persons) => persons.name === name)
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName,
-      id: String(persons.length + 1),
+    if (isNameExists(newName)) {
+      alert(`${newName} is already added to phonebook`)
     }
+    else {
+      const personObject = {
+        name: newName,
+        id: String(persons.length + 1),
+      }
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
 
   const handlePersonChange = (event) => {
@@ -31,7 +40,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
-          name: <input value={newName} onChange={handlePersonChange}/>
+          name: <input value={newName} onChange={handlePersonChange} />
         </div>
         <div>
           <button type="submit">add</button>
