@@ -28,10 +28,13 @@ const PersonForm = ({
   </form>
 )
 
-const Person = ({ filteredPersons }) => (
+const Person = ({ filteredPersons, handleDelete }) => (
   <div>
     {filteredPersons.map(person =>
-      <p key={person.id}>{person.name} {person.number}</p>
+      <p key={person.id}>
+        {person.name} {person.number}
+        <button onClick={() => handleDelete(person)}>delete</button>
+      </p>
     )}
   </div>
 )
@@ -79,6 +82,16 @@ const App = () => {
     }
   }
 
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      phonebookService
+        .deletePhonebook(person.id)
+        .then(reponse => {
+          setPersons(persons.filter(persons => persons.id != person.id))
+        })
+    }
+  }
+
   const handlePersonChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -116,7 +129,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Person filteredPersons={filteredPersons} />
+      <Person filteredPersons={filteredPersons} handleDelete={handleDelete} />
 
     </div>
   )
