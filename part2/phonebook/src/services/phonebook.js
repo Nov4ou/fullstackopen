@@ -10,6 +10,7 @@ const create = newObject => {
 }
 
 const update = (id, newObject) => {
+    // debugger
     return axios.put(`${baseUrl}/${id}`, newObject)
 }
 
