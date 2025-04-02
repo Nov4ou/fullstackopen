@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import phonebookService from './services/phonebook'
 
 const Filter = ({ filter, handleFilterChange }) => (
   <div>
@@ -67,14 +68,14 @@ const App = () => {
         number: newNumber,
         id: String(persons.length + 1),
       }
-      
-      axios
-      .post('http://localhost:3001/persons', personObject)
-      .then(respnose => {
-        setPersons(persons.concat(respnose.data))
-        setNewName('')
-        setNewNumber('') 
-      })
+
+      phonebookService
+        .create(personObject)
+        .then(respnose => {
+          setPersons(persons.concat(respnose.data))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
