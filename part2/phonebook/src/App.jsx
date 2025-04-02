@@ -67,10 +67,14 @@ const App = () => {
         number: newNumber,
         id: String(persons.length + 1),
       }
-
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      
+      axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(respnose => {
+        setPersons(persons.concat(respnose.data))
+        setNewName('')
+        setNewNumber('') 
+      })
     }
   }
 
