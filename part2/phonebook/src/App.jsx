@@ -8,6 +8,18 @@ const Filter = ({ filter, handleFilterChange }) => (
   </div>
 )
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='add'>
+      {message}
+    </div>
+  )
+}
+
 const PersonForm = ({
   addPerson,
   newName,
@@ -44,6 +56,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
+  const [addMessage, setAddMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -83,6 +96,10 @@ const App = () => {
       phonebookService
         .create(personObject)
         .then(respnose => {
+          setAddMessage(`Add ${newName}`)
+          setTimeout(() => {
+            setAddMessage(null)
+          }, 5000)
           setPersons(persons.concat(respnose.data))
           setNewName('')
           setNewNumber('')
@@ -122,7 +139,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Notification message={addMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
       <h3>Add a new</h3>
