@@ -14,8 +14,8 @@ const Notification = ({ message }) => {
   }
 
   return (
-    <div className='add'>
-      {message}
+    <div className={message.type}>
+      {message.text}
     </div>
   )
 }
@@ -56,7 +56,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
-  const [addMessage, setAddMessage] = useState(null)
+  const [addMessage, setAddMessage] = useState({ text: null, type: '' })
 
   useEffect(() => {
     console.log('effect')
@@ -84,6 +84,12 @@ const App = () => {
           .then(response => {
             setPersons(persons.map(person => person.name === newName ? response.data : person))
           })
+          .catch(error => {
+            setAddMessage({ text: `Information of ${newName} has already been removed from server`, type: 'error' })
+            setTimeout(() => {
+              setAddMessage({ text: null, type: '' })
+            }, 5000)
+          })
       }
     }
     else {
@@ -96,9 +102,9 @@ const App = () => {
       phonebookService
         .create(personObject)
         .then(respnose => {
-          setAddMessage(`Add ${newName}`)
+          setAddMessage({ text: `Add ${newName}`, type: 'success' })
           setTimeout(() => {
-            setAddMessage(null)
+            setAddMessage({ text: null, type: '' })
           }, 5000)
           setPersons(persons.concat(respnose.data))
           setNewName('')
