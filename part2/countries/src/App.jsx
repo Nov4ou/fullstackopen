@@ -10,23 +10,60 @@ const Find = ({ filter, handleFilterChange }) => (
   </div>
 )
 
-const CountryDetails = ({ country }) => (
-  <div>
-    <h1>{country.name.common}</h1>
-    <p>Capital {country.capital}</p>
-    <p>Area {country.area}</p>
-    <h2>Language</h2>
-    <ul>
-      {/* {Object.values(country.languages).map((languages, index) =>
+const CountryDetails = ({ country }) => {
+  const [weather, setWeather] = useState(null)
+
+  useEffect(() => {
+    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY
+    const capital = country.capital
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${API_KEY}&units=metric`
+
+    axios
+      .get(url)
+      .then(response => {
+        setWeather(response.data)
+      })
+      .catch(error => {
+        console.log("Error fetching weather:", error)
+      })
+  }, [country])
+
+  return (
+    <div>
+      <div>
+        <h1>{country.name.common}</h1>
+        <p>Capital {country.capital}</p>
+        <p>Area {country.area}</p>
+        <h2>Language</h2>
+        <ul>
+          {/* {Object.values(country.languages).map((languages, index) =>
         <li key={index}>{languages}</li> 
       )} */}
-      {Object.entries(country.languages).map(([code, language]) =>
-        <li key={code}>{language}</li>
-      )}
-    </ul>
-    <img src={country.flags.png} alt={country.alt} />
-  </div>
-)
+          {Object.entries(country.languages).map(([code, language]) =>
+            <li key={code}>{language}</li>
+          )}
+        </ul>
+        <img src={country.flags.png} alt={country.alt} />
+      </div>
+
+      <div>
+        <h2>Weather in {country.capital}</h2>
+        {weather ? (
+          <div>
+            <p>Temperature: {weather.main.temp} Celsius</p>
+            <img
+              src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
+              alt={weather.weather[0].description}
+            />
+            <p>Wind: {weather.wind.speed} m/s</p>
+          </div>
+        ) : (
+          <p>Loading weather...</p>
+        )}
+      </div>
+    </div>
+  )
+}
 
 const Country = ({ filteredCountries, filter, handleShow, selectedCountry }) => {
   if (filteredCountries.length >= 10 && filter) {
