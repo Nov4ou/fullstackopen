@@ -28,7 +28,7 @@ const CountryDetails = ({ country }) => (
   </div>
 )
 
-const Country = ({ filteredCountries, filter }) => {
+const Country = ({ filteredCountries, filter, handleShow, selectedCountry }) => {
   if (filteredCountries.length >= 10 && filter) {
     return (
       <p>Too many matches, specify another filter</p>
@@ -46,6 +46,10 @@ const Country = ({ filteredCountries, filter }) => {
           {filteredCountries.map(country =>
             <p key={country.cca3}>
               {country.name.common}
+              <button onClick={() => handleShow(country)}>Show</button>
+              {selectedCountry && selectedCountry.name.common === country.name.common ? (
+                <CountryDetails country={selectedCountry} />
+              ) : null}
             </p>
           )}
         </div>
@@ -54,11 +58,10 @@ const Country = ({ filteredCountries, filter }) => {
   }
 }
 
-
-
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
+  const [selectedCountry, setSelectedCountry] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -76,6 +79,15 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const handleShow = (country) => {
+    if (selectedCountry && selectedCountry.name.common === country.name.common) {
+      setSelectedCountry(null)
+    }
+    else {
+      setSelectedCountry(country)
+    }
+  }
+
   const filteredCountries = countries.filter(country =>
     country.name.common.toLowerCase().includes(filter.toLowerCase())
   )
@@ -84,7 +96,13 @@ const App = () => {
   return (
     <div>
       <Find value={filter} handleFilterChange={handleFilterChange} />
-      <Country filteredCountries={filteredCountries} filter={filter} />
+      <Country
+        filteredCountries={filteredCountries}
+        filter={filter}
+        handleShow={handleShow}
+        selectedCountry={selectedCountry}
+      />
+
     </div>
   )
 }
