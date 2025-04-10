@@ -2,6 +2,9 @@ const express = require('express')
 const morgan = require('morgan')
 
 const app = express()
+const cors = require('cors')
+
+app.use(cors())
 
 morgan.token('body', (req) => {
   return req.method === 'POST' ? JSON.stringify(req.body) : ''
@@ -95,7 +98,7 @@ app.post('/api/persons', (request, response) => {
   }
   persons = persons.concat(person)
 
-  response.json(persons)
+  response.json(person)
 })
 
 const PORT = 3001
