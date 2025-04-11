@@ -11,3 +11,23 @@ Use --update-env to update environment variables
 │ 0  │ backend    │ default     │ 1.0.0   │ cluster │ 575155   │ 1s     │ 2    │ online    │ 0%       │ 48.9mb   │ nov4ou   │ disabled │
 └────┴────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
 === Deploy finished at Thu Apr 10 08:19:00 PM PDT 2025 ===
+=== Deploy started at Thu Apr 10 08:26:42 PM PDT 2025 ===
+From https://github.com/Nov4ou/fullstackopen
+ * branch            deploy     -> FETCH_HEAD
+Already up to date.
+
+up to date, audited 76 packages in 3s
+
+14 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [backend](ids: [ 0 ])
+[PM2] [backend](0) ✓
+┌────┬────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name       │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ backend    │ default     │ 1.0.0   │ cluster │ 576047   │ 0s     │ 3    │ online    │ 0%       │ 50.8mb   │ nov4ou   │ disabled │
+└────┴────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+=== Deploy finished at Thu Apr 10 08:26:54 PM PDT 2025 ===
