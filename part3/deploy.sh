@@ -3,6 +3,8 @@
 cd "$(dirname "$0")"
 cd phonebook_backend
 
+# Test for deploy
+
 echo "=== Deploy started at $(date) ===" >> ../deploy.log
 
 git pull origin main >> ../deploy.log 2>&1
