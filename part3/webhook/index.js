@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 
 app.post('/github-webhook', (req, res) => {
 	console.log('Webhook received:', new Date());
-	exec('bash ../deploy.sh', (err, stdout, stderr) => {
+	exec('bash ../../deploy.sh', (err, stdout, stderr) => {
     		if (err) {
       			console.error(`❌ Deploy failed: ${err}`);
       			return res.status(500).send('Deploy error');
