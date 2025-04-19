@@ -14,13 +14,29 @@ mongoose.connect(url)
       error.message)
   })
 
+const phoneValidator = (number) => {
+  if (number.length < 8) return false
+
+  // Must match format: NN-NNNNNNN or NNN-NNNNNNN (2-3 digits - rest digits)
+  const pattern = /^\d{2,3}-\d+$/
+  return pattern.test(number)
+}
+
 const personSchema = new mongoose.Schema({
   name: {
     type: String,
     minLength: 3,
-    required: true 
+    required: true
   },
-  number: String,
+  number: {
+    type: String,
+    minLength: 8,
+    validate: {
+      validator: phoneValidator,
+      message: props => `${props.value} is not a valid phone number!`
+    },
+    required: true
+  }
 })
 
 personSchema.set('toJSON', {
