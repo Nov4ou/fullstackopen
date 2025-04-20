@@ -11,8 +11,8 @@ The course covers modern web development with JavaScript, focusing on building s
 | 0    | Fundamentals of Web apps                           | 0.1–0.6          | ✅ Completed |
 | 1    | Introduction to React                              | 1.1–1.14         | ✅ Completed |
 | 2    | Communicating with server                          | 2.1–2.20         | ✅ Completed |
-| 3    | Programming a server with NodeJS and Express       | 3.1–3.22         | 🔄 In Progress |
-| 4    | Testing Express servers, user admin                | 4.1–4.23         | ❌ Not started |
+| 3    | Programming a server with NodeJS and Express       | 3.1–3.22         | ✅ Completed |
+| 4    | Testing Express servers, user admin                | 4.1–4.23         | 🔄 In Progress |
 | 5    | Testing React apps                                 | 5.1–5.23         | ❌ Not started |
 | 6    | Advanced state management                          | 6.1–6.24         | ❌ Not started |
 | 7    | React router, custom hooks, styling                | 7.1–7.21         | ❌ Not started |
