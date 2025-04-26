@@ -1,5 +1,5 @@
 const blog = require("../models/blog")
-const blogs = require("../test/blogs")
+const blogs = require("../tests/blogs")
 const _ = require('lodash')
 
 const dummy = (blogs) => {
