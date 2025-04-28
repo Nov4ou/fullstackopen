@@ -17,6 +17,7 @@
     "mongoose": "^8.13.2"
   },
   "devDependencies": {
+    "@types/node": "^22.15.3",
     "supertest": "^7.1.0"
   }
 }
