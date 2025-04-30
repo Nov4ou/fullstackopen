@@ -52,6 +52,26 @@ test('a vaild blog can be added', async () => {
   assert(title.includes('CASPP'))
 })
 
+test('likes property defaults to 0 if not provided', async () => {
+  const newBlog = {
+    title: 'No Likes Blog',
+    author: 'Xinghang Chen',
+    url: 'https://www.nov4ou.top/posts/arp-spoofing-experiment/',
+    // likes is omitted to test the default value
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  assert.strictEqual(response.body.likes, 0)
+
+  const allBlogs = await api.get('/api/blogs')
+  assert.strictEqual(allBlogs.body.length, helper.initialblogs.length + 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
