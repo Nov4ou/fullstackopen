@@ -72,6 +72,30 @@ test('likes property defaults to 0 if not provided', async () => {
   assert.strictEqual(allBlogs.body.length, helper.initialblogs.length + 1)
 })
 
+test('creating a blog with missing title or url returns 400', async () => {
+  const newBlogMissingTitle = {
+    author: 'Xinghang Chen',
+    url: 'https://nov4ou.github.io',
+  }
+
+  const newBlogMissingUrl = {
+    title: 'Blog without URL',
+    author: 'Xinghang Chen',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogMissingTitle)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogMissingUrl)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
