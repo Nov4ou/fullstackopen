@@ -1,9 +1,8 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, descirbe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const { log } = require('console')
 
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
@@ -95,6 +94,29 @@ test('creating a blog with missing title or url returns 400', async () => {
     .expect(400)
     .expect('Content-Type', /application\/json/)
 })
+
+// test('delete a blog post', async () => {
+//   const initialBlog = {
+//     title: 'Sample Blog',
+//     author: 'Xinghang Chen',
+//     url: 'https://example.com',
+//     likes: 0
+//   }
+
+//   const createdBlog = await api
+//     .post('/api/blogs')
+//     .send(initialBlog)
+//     .expect(201)
+//     .expect('Content-Type', /application\/json/)
+
+//     await api
+//     .delete(`/api/blogs/${createdBlog.body.id}`)
+//     .expect(204)
+
+//     await api
+//     .get(`/api/blogs/${createdBlog.body.id}`)
+//     .expect(404)
+// })
 
 after(async () => {
   await mongoose.connection.close()
