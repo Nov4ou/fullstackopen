@@ -95,28 +95,46 @@ test('creating a blog with missing title or url returns 400', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-// test('delete a blog post', async () => {
-//   const initialBlog = {
-//     title: 'Sample Blog',
-//     author: 'Xinghang Chen',
-//     url: 'https://example.com',
-//     likes: 0
-//   }
+test('delete a blog post', async () => {
+  const initialBlog = {
+    title: 'Sample Blog',
+    author: 'Xinghang Chen',
+    url: 'https://example.com',
+    likes: 0
+  }
 
-//   const createdBlog = await api
-//     .post('/api/blogs')
-//     .send(initialBlog)
-//     .expect(201)
-//     .expect('Content-Type', /application\/json/)
+  const createdBlog = await api
+    .post('/api/blogs')
+    .send(initialBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
-//     await api
-//     .delete(`/api/blogs/${createdBlog.body.id}`)
-//     .expect(204)
+  await api
+    .delete(`/api/blogs/${createdBlog.body.id}`)
+    .expect(204)
 
-//     await api
-//     .get(`/api/blogs/${createdBlog.body.id}`)
-//     .expect(404)
-// })
+  await api
+    .get(`/api/blogs/${createdBlog.body.id}`)
+    .expect(404)
+})
+
+test('modify a blog post', async () => {
+  const blogToModify = await Blog.findOne({})
+
+  const updatedBlog = {
+    likes: 999
+  }
+
+  const response = await api
+    .put(`/api/blogs/${blogToModify.id}`)
+    .send(updatedBlog)
+    .expect(200)
+
+  assert.strictEqual(response.body.likes, 999)
+
+  const modifiedBlog = await Blog.findById(blogToModify.id)
+  assert.strictEqual(modifiedBlog.likes, 999)
+})
 
 after(async () => {
   await mongoose.connection.close()
