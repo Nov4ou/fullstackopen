@@ -11,10 +11,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "lodash": "^4.17.21",
-    "mongoose": "^8.13.2"
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.1"
   },
   "devDependencies": {
     "@types/node": "^22.15.3",
