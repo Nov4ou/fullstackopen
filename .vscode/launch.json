@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/part4/bloglist/tests/blog_api.test.js",
+      "program": "${workspaceFolder}/part4/bloglist/index.js",
       "env": {
         "NODE_ENV": "test",
       },
