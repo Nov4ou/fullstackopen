@@ -14,6 +14,18 @@ const api = supertest(app)
 describe('Blog API tests', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash('sekret', saltRounds)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+
+    token = loginResponse.body.token
 
     await Blog.insertMany(helper.initialblogs)
   })
@@ -43,6 +55,7 @@ describe('Blog API tests', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -64,6 +77,7 @@ describe('Blog API tests', () => {
 
     const response = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -87,12 +101,14 @@ describe('Blog API tests', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogMissingTitle)
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogMissingUrl)
       .expect(400)
       .expect('Content-Type', /application\/json/)
@@ -108,16 +124,19 @@ describe('Blog API tests', () => {
 
     const createdBlog = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(initialBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     await api
       .delete(`/api/blogs/${createdBlog.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     await api
       .get(`/api/blogs/${createdBlog.body.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
   })
 
@@ -130,6 +149,7 @@ describe('Blog API tests', () => {
 
     const response = await api
       .put(`/api/blogs/${blogToModify.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send(updatedBlog)
       .expect(200)
 
@@ -137,6 +157,20 @@ describe('Blog API tests', () => {
 
     const modifiedBlog = await Blog.findById(blogToModify.id)
     assert.strictEqual(modifiedBlog.likes, 999)
+  })
+
+  test('adding a blog fails with 401 if token is not provided', async () => {
+    const newBlog = {
+      title: 'Unauthorized Blog',
+      author: 'No Token',
+      url: 'https://notoken.com',
+      likes: 1
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 })
 
@@ -264,10 +298,10 @@ describe('when there is initially one user in db', () => {
     }
 
     const result = await api
-    .post('/api/users')
-    .send(newUser)
-    .expect(400)
-    .expect('Content-Type', /application\/json/)
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
 
     assert.match(result.body.error, /expected `username` to be unique/)
 
