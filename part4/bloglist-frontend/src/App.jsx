@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 
 const Notification = ({ message }) => {
   if (message === null)
@@ -97,16 +98,12 @@ const App = () => {
     setNewUrl('')
   }
 
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
+  if (user === null) {
     return (
       <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
+        <h2>Log in to application</h2>
+        <Notification message={loginMessage} />
+        <Togglable buttonLabel="log in">
           <LoginForm
             username={username}
             password={password}
@@ -114,43 +111,7 @@ const App = () => {
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleSubmit={handleLogin}
           />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
-
-  const blogForm = () => {
-    const hideWhenVisible = { display: blogVisible ? 'none' : '' }
-    const showWhenVisible = { display: blogVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setBlogVisible(true)}>new note</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm
-            title={newTitle}
-            author={newAuthor}
-            url={newUrl}
-            handleTitleChange={({ target }) => setNewTitle(target.value)}
-            handleAuthorChange={({ target }) => setNewAuthor(target.value)}
-            handleUrlChange={({ target }) => setNewUrl(target.value)}
-            handleSubmit={handleCreate}
-          />
-          <button onClick={() => setBlogVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
-
-  if (user === null) {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification message={loginMessage} />
-        {loginForm()}
+        </Togglable>
       </div>
     )
   }
@@ -166,7 +127,17 @@ const App = () => {
         </button>
       </p>
 
-      {blogForm()}
+      <Togglable buttonLabel="new note">
+        <BlogForm
+          title={newTitle}
+          author={newAuthor}
+          url={newUrl}
+          handleTitleChange={({ target }) => setNewTitle(target.value)}
+          handleAuthorChange={({ target }) => setNewAuthor(target.value)}
+          handleUrlChange={({ target }) => setNewUrl(target.value)}
+          handleSubmit={handleCreate}
+        />
+      </Togglable>
 
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
