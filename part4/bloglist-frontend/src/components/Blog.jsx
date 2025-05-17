@@ -1,10 +1,21 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, changeBlog }) => {
   const [expanded, setExpanded] = useState(false)
 
   const toggleExpanded = () => {
     setExpanded(!expanded)
+  }
+
+  const likeBlog = (event) => {
+    event.preventDefault()
+    changeBlog(blog.id, {
+      user: blog.user,
+      title: blog.title,
+      author: blog.author,
+      likes: blog.likes + 1,
+      url: blog.url
+    })
   }
 
   const blogStyle = {
@@ -28,7 +39,8 @@ const Blog = ({ blog }) => {
         <div>
           <div>{blog.url}</div>
           <div>
-            likes {blog.likes} <button>like</button>
+            likes {blog.likes}
+            <button onClick={likeBlog}>like</button>
           </div>
           <div>{blog.author}</div>
         </div>

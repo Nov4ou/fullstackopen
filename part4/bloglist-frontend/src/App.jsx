@@ -68,7 +68,6 @@ const App = () => {
     }
   }
 
-
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     blogService.setToken(null)
@@ -82,6 +81,13 @@ const App = () => {
       setAddMessage({ text: null, type: '' })
     }, 5000)
     setBlogs(blogs.concat(createdBlog))
+  }
+
+  const handleLike = async (id, blogObject) => {
+    const likedBlog = await blogService.like(id, blogObject)
+    setBlogs(blogs.map(b =>
+      b.id !== id ? b : likedBlog
+    ))
   }
 
   if (user === null) {
@@ -119,7 +125,7 @@ const App = () => {
       </Togglable>
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} changeBlog={handleLike} />
       )}
     </div>
   )
