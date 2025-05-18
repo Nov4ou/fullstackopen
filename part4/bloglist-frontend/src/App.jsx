@@ -29,6 +29,8 @@ const App = () => {
   const [addMessage, setAddMessage] = useState({ text: null, type: '' })
   const [loginMessage, setLoginMessage] = useState({ text: null, type: '' })
 
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -124,7 +126,7 @@ const App = () => {
         />
       </Togglable>
 
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} changeBlog={handleLike} />
       )}
     </div>
