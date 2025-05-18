@@ -18,9 +18,6 @@ const Notification = ({ message }) => {
 }
 
 const App = () => {
-  const [loginVisible, setLoginVisible] = useState(false)
-  const [blogVisible, setBlogVisible] = useState(false)
-
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -87,9 +84,19 @@ const App = () => {
 
   const handleLike = async (id, blogObject) => {
     const likedBlog = await blogService.like(id, blogObject)
+    const original = blogs.find(b => b.id === id)
+    likedBlog.user = original.user
     setBlogs(blogs.map(b =>
       b.id !== id ? b : likedBlog
     ))
+  }
+
+  const handleRemove = async (id, blogObject) => {
+    const ok = window.confirm(`Remove blog "${blogObject.title}" ?`)
+    if (!ok) return
+
+    await blogService.remove(id)
+    setBlogs(blogs.filter(b => b.id !== id))
   }
 
   if (user === null) {
@@ -127,7 +134,7 @@ const App = () => {
       </Togglable>
 
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} changeBlog={handleLike} />
+        <Blog key={blog.id} blog={blog} changeBlog={handleLike} removeBlog={handleRemove} currentUser={user} />
       )}
     </div>
   )
