@@ -34,8 +34,9 @@ const Blog = ({ blog, changeBlog, removeBlog, currentUser }) => {
 
   return (
     <div style={blogStyle}>
-      <div>
-        {blog.title}
+      <div className='blog'>
+        <span>{blog.title}</span>{' '}
+        <span>{blog.author}</span>
         <button onClick={toggleExpanded}>
           {expanded ? 'hide' : 'view'}
         </button>
@@ -48,7 +49,6 @@ const Blog = ({ blog, changeBlog, removeBlog, currentUser }) => {
             likes {blog.likes}
             <button onClick={likeBlog}>like</button>
           </div>
-          <div>{blog.author}</div>
           {showRemove && (<div>
             <button onClick={deleteBlog}>remove</button>
           </div>)}
