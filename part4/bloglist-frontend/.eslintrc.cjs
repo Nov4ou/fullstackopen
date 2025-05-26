@@ -3,56 +3,47 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
+    "vitest-globals/env": true
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:vitest-globals/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: [
-    'react-refresh',
-    'vitest'
-  ],
+  plugins: ['react-refresh'],
   rules: {
     "indent": [
-        "error",
-        2  
+      "error",
+      2
     ],
     "linebreak-style": [
-        "error",
-        "unix"
+      "error",
+      "unix"
     ],
     "quotes": [
-        "error",
-        "single"
+      "error",
+      "single"
     ],
     "semi": [
-        "error",
-        "never"
+      "error",
+      "never"
     ],
     "eqeqeq": "error",
     "no-trailing-spaces": "error",
     "object-curly-spacing": [
-        "error", "always"
+      "error", "always"
     ],
     "arrow-spacing": [
-        "error", { "before": true, "after": true }
+      "error", { "before": true, "after": true }
     ],
     "no-console": 0,
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
-    "no-unused-vars": 0    
+    "no-unused-vars": 0
   },
-    overrides: [
-    {
-      files: ['**/*.test.{js,jsx,ts,tsx}'],
-      env: {
-        'vitest/globals': true
-      }
-    }
-  ]
 }
