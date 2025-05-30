@@ -61,7 +61,7 @@ describe('Blog app', () => {
       ).toBeVisible()
     })
 
-    test.only('a blog can be liked', async ({ page }) => {
+    test('a blog can be liked', async ({ page }) => {
       await page.getByRole('button', { name: 'new blog' }).click()
       await page.getByTestId('title').fill('playwright test title')
       await page.getByTestId('author').fill('playwright test author')
@@ -76,6 +76,36 @@ describe('Blog app', () => {
       await expect(
         page.getByText(/likes\s*1/)
       ).toBeVisible()
+    })
+
+    test.only('the user who added the blog can delete the blog', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('playwright test title')
+      await page.getByTestId('author').fill('playwright test author')
+      await page.getByTestId('url').fill('playwright test url')
+      await page.getByRole('button', { name: 'create' }).click()
+
+      await expect(
+        page.getByText('playwright test title', { exact: true })
+      ).toBeVisible()
+      await expect(
+        page.getByText('playwright test author', { exact: true })
+      ).toBeVisible()
+
+      await page.getByRole('button', { name: 'view' }).click()
+
+      page.once('dialog', async dialog => {
+        expect(dialog.type()).toBe('confirm')
+        await dialog.accept()    
+      })
+      await page.getByRole('button', { name: 'remove' }).click()
+
+      await expect(
+        page.getByText('playwright test title', { exact: true })
+      ).not.toBeVisible()
+      await expect(
+        page.getByText('playwright test author', { exact: true })
+      ).not.toBeVisible()
     })
   })
 })

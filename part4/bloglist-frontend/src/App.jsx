@@ -75,6 +75,7 @@ const App = () => {
 
   const handleCreate = async (blogObject) => {
     const createdBlog = await blogService.create(blogObject)
+    createdBlog.user = user
     setAddMessage({ text: `a new blog ${createdBlog.title} by ${createdBlog.author} added`, type: 'success' })
     setTimeout(() => {
       setAddMessage({ text: null, type: '' })
