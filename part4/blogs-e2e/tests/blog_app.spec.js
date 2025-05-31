@@ -107,13 +107,73 @@ describe('Blog app', () => {
         page.getByText('playwright test author', { exact: true })
       ).not.toBeVisible()
     })
+
+    test('blogs sorted by likes', async ({ page, request }) => {
+      const blogsToCreate = [
+        {
+          title: 'Blog with 2 likes',
+          author: 'e2e-test',
+          url: 'http://example.com/2',
+          likes: 2
+        },
+        {
+          title: 'Blog with 5 likes',
+          author: 'e2e-test',
+          url: 'http://example.com/5',
+          likes: 5
+        },
+        {
+          title: 'Blog with 1 like',
+          author: 'e2e-test',
+          url: 'http://example.com/1',
+          likes: 1
+        }
+      ]
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+      for (const blog of blogsToCreate) {
+        await page.getByTestId('title').fill(blog.title)
+        await page.getByTestId('author').fill(blog.author)
+        await page.getByTestId('url').fill(blog.url)
+        await page.getByRole('button', { name: 'create' }).click()
+
+        await expect(page.getByText(blog.title, { exact: true })).toBeVisible()
+      }
+
+      const blogWrappers = page.locator('.blog').locator('..')
+      await expect(blogWrappers).toHaveCount(3)
+
+      // await page.pause()
+      // Note: Can't use nth(i) because the order will be changed as likes increase
+
+      for (const blog of blogsToCreate) {
+        const { title, likes: targetLikes } = blog
+        const blogTitleDiv = page.locator('.blog', { hasText: title })
+        const blogWrapper = blogTitleDiv.locator('..')
+        await blogWrapper.getByRole('button', { name: 'view' }).click()
+        await expect(blogWrapper.getByText(/likes\s*0/)).toBeVisible()
+        for (let j = 0; j < targetLikes; j++) {
+          await expect(blogWrapper.getByRole('button', { name: 'like' })).toBeVisible()
+          await blogWrapper.getByRole('button', { name: 'like' }).click()
+          await expect(
+            blogWrapper.getByText(new RegExp(`likes\\s*${j + 1}`))
+          ).toBeVisible()
+        }
+      }
+
+      const sortedWrappers = page.locator('.blog').locator('..')
+      await expect(sortedWrappers).toHaveCount(3)
+      await expect(sortedWrappers.nth(0).locator('.blog')).toContainText('Blog with 5 likes')
+      await expect(sortedWrappers.nth(1).locator('.blog')).toContainText('Blog with 2 likes')
+      await expect(sortedWrappers.nth(2).locator('.blog')).toContainText('Blog with 1 like')
+    })
   })
 
   describe('another user logged in', () => {
     test('only the user who added the blog sees the remove button', async ({ page, request }) => {
       const userA = { name: 'userA', username: 'userA', password: 'passwordA' }
       const userB = { name: 'userB', username: 'userB', password: 'passwordB' }
-      await page.pause()
+      // await page.pause()
       await request.post('http://localhost:3003/api/users', { data: userA })
       await request.post('http://localhost:3003/api/users', { data: userB })
 
