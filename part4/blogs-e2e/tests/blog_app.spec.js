@@ -78,7 +78,7 @@ describe('Blog app', () => {
       ).toBeVisible()
     })
 
-    test.only('the user who added the blog can delete the blog', async ({ page }) => {
+    test('the user who added the blog can delete the blog', async ({ page }) => {
       await page.getByRole('button', { name: 'new blog' }).click()
       await page.getByTestId('title').fill('playwright test title')
       await page.getByTestId('author').fill('playwright test author')
@@ -96,7 +96,7 @@ describe('Blog app', () => {
 
       page.once('dialog', async dialog => {
         expect(dialog.type()).toBe('confirm')
-        await dialog.accept()    
+        await dialog.accept()
       })
       await page.getByRole('button', { name: 'remove' }).click()
 
@@ -105,6 +105,49 @@ describe('Blog app', () => {
       ).not.toBeVisible()
       await expect(
         page.getByText('playwright test author', { exact: true })
+      ).not.toBeVisible()
+    })
+  })
+
+  describe('another user logged in', () => {
+    test('only the user who added the blog sees the remove button', async ({ page, request }) => {
+      const userA = { name: 'userA', username: 'userA', password: 'passwordA' }
+      const userB = { name: 'userB', username: 'userB', password: 'passwordB' }
+      await page.pause()
+      await request.post('http://localhost:3003/api/users', { data: userA })
+      await request.post('http://localhost:3003/api/users', { data: userB })
+
+      await page.getByRole('button', { name: 'log in' }).click()
+      await page.getByTestId('username').fill('userA')
+      await page.getByTestId('password').fill('passwordA')
+      await page.getByRole('button', { name: 'login' }).click()
+      await expect(page.getByText('userA logged in')).toBeVisible()
+
+      // UserA create a blog
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('Blog created by userA')
+      await page.getByTestId('author').fill('userA')
+      await page.getByTestId('url').fill('urlA')
+      await page.getByRole('button', { name: 'create' }).click()
+      await expect(
+        page.getByText('Blog created by userA', { exact: true })
+      ).toBeVisible()
+      await expect(
+        page.getByText('userA', { exact: true })
+      ).toBeVisible()
+
+      // Log out
+      await page.getByRole('button', { name: 'logout' }).click()
+
+      await page.getByRole('button', { name: 'log in' }).click()
+      await page.getByTestId('username').fill('userB')
+      await page.getByTestId('password').fill('passwordB')
+      await page.getByRole('button', { name: 'login' }).click()
+      await expect(page.getByText('userB logged in')).toBeVisible()
+
+      await page.getByRole('button', { name: 'view' }).click()
+      await expect(
+        page.getByRole('button', { name: 'remove' })
       ).not.toBeVisible()
     })
   })
